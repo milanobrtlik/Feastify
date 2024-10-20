@@ -1,0 +1,41 @@
+name: salaty
+description: A new Flutter project.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.18.5 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  hive_flutter:
+  flutter_bloc:
+  graphql:
+  formz:
+  equatable:
+  flutter_markdown:
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  json_serializable:
+  build_runner:
+  graphql_codegen:
+  flutter_launcher_icons:
+
+flutter_icons:
+  image_path: "assets/launcher_icon.png"
+  android: "launcher_icon"
+
+flutter:
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/launcher_icon.png
+    - assets/gold.png
+    - assets/silver.png
+    - assets/bronze.png
+    - assets/potato.png

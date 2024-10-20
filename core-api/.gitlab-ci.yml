@@ -1,0 +1,22 @@
+image: mcr.microsoft.com/dotnet/sdk:6.0-alpine
+
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  only:
+    - master
+  script:
+    - apk add --update --no-cache openssh-client bash
+    - eval $(ssh-agent -s)
+    - echo "$SCW_PK" | ssh-add - > /dev/null
+    - mkdir "${HOME}/.ssh"
+    - echo "$KNOWN_HOSTS" >> ~/.ssh/known_hosts
+    - "dotnet publish salaty-api.sln -r linux-x64 -p:PublishSingleFile=true -p:PublishReadyToRun=true --self-contained true -c Release"
+    - ls -lah /builds/milanobrtlik/salaty-api/bin/Release/net6.0/linux-x64/publish
+    - "scp /builds/milanobrtlik/salaty-api/bin/Release/net6.0/linux-x64/publish/SalatyAPI ubuntu@51.15.126.107:/var/www/salaty/salaty_tmp"
+    - "scp /builds/milanobrtlik/salaty-api/bin/Release/net6.0/linux-x64/publish/libsodium.so ubuntu@51.15.126.107:/var/www/salaty/libsodium.so"
+    - ssh ubuntu@51.15.126.107 sudo systemctl stop salaty.service
+    - ssh ubuntu@51.15.126.107 mv /var/www/salaty/salaty_tmp /var/www/salaty/salaty
+    - ssh ubuntu@51.15.126.107 sudo systemctl start salaty.service

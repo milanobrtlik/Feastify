@@ -1,0 +1,201 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+"The `@defer` directive may be provided for fragment spreads and inline fragments to inform the executor to delay the execution of the current fragment to indicate deprioritization of the current fragment. A query with `@defer` directive will cause the request to potentially return multiple responses, where non-deferred data is delivered in the initial response and data deferred is delivered in a subsequent response. `@include` and `@skip` take precedence over `@defer`."
+directive @defer(
+    "Deferred when true."
+    if: Boolean,
+    "If this argument label has a value other than null, it will be passed on to the result of this defer directive. This label is intended to give client applications a way to identify to which fragment a deferred result belongs to."
+    label: String
+) on FRAGMENT_SPREAD | INLINE_FRAGMENT
+
+"The `@stream` directive may be provided for a field of `List` type so that the backend can leverage technology such as asynchronous iterators to provide a partial list in the initial response, and additional list items in subsequent responses. `@include` and `@skip` take precedence over `@stream`."
+directive @stream(
+    "Streamed when true."
+    if: Boolean,
+    "The initial elements that shall be send down to the consumer."
+    initialCount: Int! = 0,
+    "If this argument label has a value other than null, it will be passed on to the result of this stream directive. This label is intended to give client applications a way to identify to which fragment a streamed result belongs to."
+    label: String
+) on FIELD
+
+directive @authorize(
+    "Defines when when the resolver shall be executed.By default the resolver is executed after the policy has determined that the current user is allowed to access the field."
+    apply: ApplyPolicy! = BEFORE_RESOLVER,
+    "The name of the authorization policy that determines access to the annotated resource."
+    policy: String,
+    "Roles that are allowed to access the annotated resource."
+    roles: [String!]
+) on SCHEMA | OBJECT | FIELD_DEFINITION
+
+type AuthPayload {
+    errors: [UserError!]!
+    token: String
+}
+
+type Competitor {
+    id: Int!
+    label: String!
+    name: String!
+    rating: Float
+    ratings: [UserRating]
+}
+
+type CompetitorPayload {
+    competitor: Competitor
+    errors: [UserError!]!
+}
+
+type ConfirmationPayload {
+    errors: [UserError!]!
+}
+
+type Contest {
+    competitors: [Competitor]
+    criteria: [Criteria]
+    id: Int!
+    name: String!
+    state: ContestState!
+}
+
+type ContestPayload {
+    contest: Contest
+    errors: [UserError!]!
+}
+
+type ContestResult {
+    id: Int!
+    label: String!
+    name: String!
+    score: Float!
+}
+
+type ContestResultPayload {
+    errors: [UserError!]!
+    results: [ContestResult!]
+}
+
+type Criteria {
+    description: String
+    id: Int!
+    name: String!
+    weight: Int!
+}
+
+type CriteriaPayload {
+    criteria: Criteria
+    errors: [UserError!]!
+}
+
+type Mutation {
+    competitorCreate(input: CompetitorCreateInputTypeInput!): CompetitorPayload!
+    competitorDelete(id: ID!): ConfirmationPayload!
+    competitorUpdate(id: ID!, input: CompetitorUpdateInputTypeInput!): CompetitorPayload!
+    contestCreate(input: ContestCreateInput!): ContestPayload!
+    contestDelete(id: Int!): ConfirmationPayload!
+    contestUpdate(id: Int!, input: ContestUpdateInput!): ContestPayload!
+    login(input: LoginInput!): AuthPayload!
+    rate(input: UserRateInput!): UserRatingPayload!
+}
+
+type MyRatingDetailPayload {
+    criteria: [RatingCriteria!]
+    errors: [UserError!]!
+    finalRating: Float
+}
+
+type Query {
+    competitorDetail(id: ID!): CompetitorPayload!
+    competitorList: [Competitor!]!
+    contestDetail(id: ID!): ContestPayload!
+    contestList: [Contest!]!
+    contestResult(id: ID!): ContestResultPayload!
+    criteriaDetail(id: ID!): CriteriaPayload!
+    ratingDetailByCompetitorId(id: ID!): MyRatingDetailPayload!
+    usersAverageRating(contestId: ID!): UsersAverageRatingPayload!
+}
+
+type RatingCriteria {
+    criteriaId: ID!
+    description: String
+    name: String!
+    rating: Int
+    weight: Int!
+}
+
+type User {
+    id: Int!
+    name: String!
+}
+
+type UserAverageRatingResult {
+    name: String!
+    score: Float!
+}
+
+type UserError {
+    code: String!
+    message: String
+}
+
+type UserRating {
+    criteria: Criteria
+    id: Int!
+    rating: Int!
+}
+
+type UserRatingPayload {
+    competitor: Competitor
+    errors: [UserError!]!
+}
+
+type UsersAverageRatingPayload {
+    errors: [UserError!]!
+    results: [UserAverageRatingResult!]
+}
+
+enum ApplyPolicy {
+    AFTER_RESOLVER
+    BEFORE_RESOLVER
+}
+
+enum ContestState {
+    EVALUATED
+    EVALUATING
+    NOT_STARTED
+    ONGOING
+    PREPARING
+}
+
+input CompetitorCreateInputTypeInput {
+    contestId: Int!
+    name: String!
+}
+
+input CompetitorUpdateInputTypeInput {
+    contestId: Int
+    name: String
+}
+
+input ContestCreateInput {
+    name: String!
+}
+
+input ContestUpdateInput {
+    name: String!
+}
+
+input LoginInput {
+    password: String!
+    username: String!
+}
+
+input UserRateInput {
+    competitorId: Int!
+    criteriaId: Int!
+    rating: Int!
+}

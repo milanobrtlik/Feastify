@@ -1,0 +1,31 @@
+mutation rate($input: UserRateInput!) {
+    rate(input: $input) {
+        competitor {
+            ...CompetitorDetail
+        }
+    }
+}
+
+query competitorDetail($id: ID!) {
+    competitorDetail(id: $id) {
+        competitor {
+            ...CompetitorDetail
+        }
+    }
+}
+
+fragment CompetitorDetail on Competitor {
+    id
+    name
+    rating
+    label
+    ratings {
+        rating
+        criteria {
+            id
+            name
+            weight
+            description
+        }
+    }
+}

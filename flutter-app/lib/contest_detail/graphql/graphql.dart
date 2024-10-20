@@ -1,0 +1,1 @@
+export 'contest.graphql.dart';

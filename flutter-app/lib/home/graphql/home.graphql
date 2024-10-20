@@ -1,0 +1,7 @@
+query loadHome {
+    contestList {
+        id
+        name
+        state
+    }
+}

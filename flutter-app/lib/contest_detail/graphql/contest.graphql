@@ -1,0 +1,52 @@
+query contestDetail($id: ID!) {
+    contestDetail(id: $id) {
+        contest {
+            id
+            name
+            criteria {
+                id
+                name
+                weight
+            }
+            competitors {
+                id
+                name
+                rating
+                label
+            }
+            state
+        }
+    }
+}
+
+query contestResult($id: ID!) {
+    contestResult(id: $id) {
+        errors {
+            code
+            message
+        }
+        results {
+            id
+            label
+            name
+            score
+        }
+    }
+}
+
+query ratingDetail($id: ID!) {
+    ratingDetailByCompetitorId(id: $id) {
+        errors {
+            message
+            code
+        }
+        criteria {
+            criteriaId
+            name
+            description
+            weight
+            rating
+        }
+        finalRating
+    }
+}

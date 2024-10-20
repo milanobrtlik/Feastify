@@ -1,0 +1,14 @@
+query contestCriteriaDetail($id: ID!) {
+    criteriaDetail(id: $id) {
+        criteria {
+            ...ContestCriteriaDetail
+        }
+    }
+}
+
+fragment ContestCriteriaDetail on Criteria {
+    id
+    name
+    weight
+    description
+}
